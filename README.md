@@ -18,8 +18,7 @@ En applikation kallad CoDodo håller på att utvecklas för att ersätta detta. 
 
    CododoApi:et innehåller rätt mycket tveksam kod, om du ser något du tycker är fel eller dåligt gjort är det bara att fixa.
    
-
-När du är klar så skapa en pull-request för dina förändringar.
+Skapa en fork av det här repot och skicka länken till oss. Om du inte vill göra koden publik så behöver du bjuda in en av våra utvecklare till repot.
        
 **Viktigt❗**
 > Du behöver inte göra alla tre uppgifter, det räcker att du gör tillräckligt mycket för att vi skall kunna ha en diskussion om det du gjort. Det är viktigare att du gör saker som visar vad du är bra på än att lösa allt.
