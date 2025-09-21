@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using CoDodoApi.Services.DTOs;
+using System.Text;
 
 namespace CoDodoApi.Entities;
 

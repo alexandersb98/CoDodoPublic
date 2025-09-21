@@ -1,4 +1,6 @@
-﻿namespace CoDodoApi.Entities;
+﻿using CoDodoApi.Entities;
+
+namespace CoDodoApi.Services.DTOs;
 
 public sealed class DeleteProcessDTO
 {
