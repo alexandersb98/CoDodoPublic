@@ -17,7 +17,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
 app.MapAllRoutes();
-app.UseAuthorization();
-app.UseAuthentication();
+
+// Order is important here
+app.UseAuthentication(); // First verify identity of user
+app.UseAuthorization(); // Then verify the access rights of the user
 
 app.Run();
