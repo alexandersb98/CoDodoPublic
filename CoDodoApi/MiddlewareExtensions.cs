@@ -18,7 +18,7 @@ public static class MiddlewareExtensions
         processes.MapPost("", Endpoints.CreateProcess)
             .RequireAuthorization();
 
-        processes.MapDelete("", Endpoints.DeleteProcess);
+        processes.MapDelete("", Endpoints.DeleteProcess); //todo: consider requiring authz /ASB
 
         return app;
     }

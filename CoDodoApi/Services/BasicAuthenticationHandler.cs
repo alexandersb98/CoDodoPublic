@@ -11,21 +11,21 @@ public class BasicAuthenticationHandler(
     ILoggerFactory logger,
     UrlEncoder encoder) 
     : 
-    AuthenticationHandler<AuthenticationSchemeOptions>(options, 
-                                                       logger, 
-                                                       encoder)
+    AuthenticationHandler<AuthenticationSchemeOptions>(
+        options: options, 
+        logger: logger, 
+        encoder: encoder)
 {
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        string authHeader = Request.Headers.Authorization.ToString();
+        var authHeader = Request.Headers.Authorization.ToString();
 
-        if (authHeader is null 
-            || !authHeader.StartsWith("basic", 
-                    StringComparison.OrdinalIgnoreCase))
+        if (!authHeader.StartsWith("basic", StringComparison.OrdinalIgnoreCase))
             return Fail();
 
-        string[] credentials = Credentials(authHeader);
+        var credentials = Credentials(authHeader);
 
+        // todo: make this configurable
         if (credentials[0] != "admin" || credentials[1] != "password")
             return Fail();
 
