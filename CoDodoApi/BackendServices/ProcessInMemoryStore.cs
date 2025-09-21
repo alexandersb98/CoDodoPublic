@@ -1,12 +1,11 @@
-﻿using CoDodoApi.Entities;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using CoDodoApi.Entities;
 
-namespace CoDodoApi.Services;
+namespace CoDodoApi.BackendServices;
 
-public sealed
-class ProcessInMemoryStore()
+public sealed class ProcessInMemoryStore()
 {
-    readonly ConcurrentDictionary<string, Process> keyedProcesses = [];
+    private readonly ConcurrentDictionary<string, Process> keyedProcesses = [];
 
     public Task<Process> Add(Process process)
     {

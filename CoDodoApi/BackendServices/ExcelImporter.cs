@@ -1,15 +1,13 @@
 ﻿using ClosedXML.Excel;
 using CoDodoApi.Entities;
 
-namespace CoDodoApi.Services;
+namespace CoDodoApi.BackendServices;
 
-public record ExcelImporter(ProcessInMemoryStore Store,
-                            TimeProvider Provider,
-                            ILogger<ExcelImporter> Logger)
+public sealed class ExcelImporter(
+    ProcessInMemoryStore processStore,
+    TimeProvider timeProvider,
+    ILogger<ExcelImporter> logger)
 {
-    readonly ProcessInMemoryStore store = Store;
-    readonly TimeProvider timeProvider = Provider;
-    readonly ILogger logger = Logger;
 
     public void Import(IFormFile file)
     {
@@ -28,7 +26,7 @@ public record ExcelImporter(ProcessInMemoryStore Store,
                 .TakeWhile(x => !x.Cell(1).IsEmpty())
                 .Select(RowToProcess);
 
-            _ = processes.Select(store.Add).ToArray();
+            _ = processes.Select(processStore.Add).ToArray();
         }
         catch (Exception ex)
         {
@@ -37,7 +35,7 @@ public record ExcelImporter(ProcessInMemoryStore Store,
         }
     }
 
-    Process RowToProcess(IXLRow row)
+    private Process RowToProcess(IXLRow row)
     {
         IXLCell NAME = row.Cell(1);
         IXLCell CAPABILITY = row.Cell(2);
@@ -48,33 +46,33 @@ public record ExcelImporter(ProcessInMemoryStore Store,
         IXLCell LASTUPDATE = row.Cell(7);
         IXLCell GENERATIONDATE = row.Cell(8);
 
-        string name = NAME.GetValue<string>();
-        string capability = CAPABILITY.GetValue<string>();
-        string company = OPPORTUNITY.GetValue<string>();
-        string status = STATUS.GetValue<string>();
-        string salesLead = SALESLEAD.GetValue<string>();
+        var name = NAME.GetValue<string>();
+        var capability = CAPABILITY.GetValue<string>();
+        var company = OPPORTUNITY.GetValue<string>();
+        var status = STATUS.GetValue<string>();
+        var salesLead = SALESLEAD.GetValue<string>();
         HOURLYRATE.TryGetValue(out int hourlyRate);
-        string lu = LASTUPDATE.GetValue<string>();
-        string gd = GENERATIONDATE.GetValue<string>();
+        var lu = LASTUPDATE.GetValue<string>();
+        var gd = GENERATIONDATE.GetValue<string>();
 
-        DateTime LastUpdate = DateTime.Parse(lu);
+        DateTime lastUpdate = DateTime.Parse(lu);
         DateTime generationDate = DateTime.Parse(gd);
 
-        string uri = Guid.NewGuid().ToString();
+        var uri = Guid.NewGuid().ToString();
 
         Opportunity opportunity = new(
-            uri,
-            company,
-            capability,
-            salesLead,
+            uriForAssignment: uri,
+            company: company,
+            capability: capability,
+            nameOfSalesLead: salesLead,
             hourlyRate);
 
-        return new(
-            name,
-            opportunity,
-            status,
-            generationDate,
-            LastUpdate,
-            timeProvider);
+        return new Process(
+            name: name,
+            opportunity: opportunity,
+            status: status,
+            createdDate: generationDate,
+            updatedDate: lastUpdate,
+            provider: timeProvider);
     }
 }
