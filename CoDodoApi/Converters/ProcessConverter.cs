@@ -6,6 +6,7 @@ namespace CoDodoApi.Converters;
 public interface IProcessConverter
 {
     ProcessDTO ConvertToDto(Process process);
+    Process ConvertToEntity(CreateProcessDTO dto);
 }
 
 public sealed class ProcessConverter : IProcessConverter
@@ -22,6 +23,10 @@ public sealed class ProcessConverter : IProcessConverter
         Process p = process;
         Opportunity d = p.Opportunity;
 
+        var now = this.timeProvider.GetUtcNow();
+        var daysSinceUpdate = NumberOfWholeDays(now - p.UpdatedDate);
+        var daysSinceCreation = NumberOfWholeDays(now - p.CreatedDate);
+
         return new ProcessDTO(
             name: p.Name,
             uriForAssignment: d.UriForAssignment,
@@ -32,24 +37,30 @@ public sealed class ProcessConverter : IProcessConverter
             hourlyRateInSEK: d.HourlyRateInSEK,
             updatedDate: p.UpdatedDate,
             createdDate: p.CreatedDate,
-            daysSinceUpdate: DaysSinceUpdate(p),
-            daysSinceCreation: DaysSinceCreation(p));
+            daysSinceUpdate: daysSinceUpdate,
+            daysSinceCreation: daysSinceCreation);
     }
 
-    private int DaysSinceUpdate(Process process)
+
+    public Process ConvertToEntity(CreateProcessDTO dto)
     {
-        var diff = this.timeProvider.GetUtcNow() - process.UpdatedDate;
+        Opportunity o = new(
+            uriForAssignment: dto.UriForAssignment,
+            company: dto.Company,
+            capability: dto.Capability,
+            nameOfSalesLead: dto.NameOfSalesLead,
+            hourlyRateInSEK: dto.HourlyRateInSEK);
 
-        return NumberOfWholeDays(diff);
+        var now = this.timeProvider.GetUtcNow();
+
+        return new Process(
+            name: dto.Name,
+            opportunity: o, // todo: consider using dto.Opportunity /ASB
+            status: dto.Status,
+            createdDate: now,
+            updatedDate: now);
     }
-
-    private int DaysSinceCreation(Process process)
-    {
-        var diff = this.timeProvider.GetUtcNow() - process.CreatedDate;
-
-        return NumberOfWholeDays(diff);
-    }
-
+    
     private static int NumberOfWholeDays(TimeSpan diff)
     {
         double numberOfDays = diff.TotalDays;

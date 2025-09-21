@@ -36,13 +36,12 @@ public static class Endpoints
     public static async Task<IResult> CreateProcess(
         CreateProcessDTO dto,
         ProcessInMemoryStore store,
-        TimeProvider provider,
         IProcessConverter processConverter,
         ILoggerFactory logger)
     {
         try
         {
-            Process process = dto.ToProcess(provider);
+            Process process = processConverter.ConvertToEntity(dto);
 
             Process r = await store.Add(process);
 
