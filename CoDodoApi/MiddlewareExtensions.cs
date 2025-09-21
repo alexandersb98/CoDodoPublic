@@ -2,8 +2,7 @@
 
 public static class MiddlewareExtensions
 {
-    public static 
-    WebApplication MapAllRoutes(this WebApplication app)
+    public static WebApplication MapAllRoutes(this WebApplication app)
     {
         RouteGroupBuilder api = app.MapGroup("/api");
 
@@ -13,7 +12,7 @@ public static class MiddlewareExtensions
 
         RouteGroupBuilder processes = api.MapGroup("/processes");
 
-        processes.MapGet("", Endpoints.AllProcesses)
+        processes.MapGet("", Endpoints.GetAllProcesses)
             .RequireAuthorization();
 
         processes.MapPost("", Endpoints.CreateProcess)

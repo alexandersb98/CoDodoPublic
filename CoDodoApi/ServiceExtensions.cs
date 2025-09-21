@@ -6,9 +6,7 @@ namespace CoDodoApi;
 
 public static class ServiceExtensions
 {
-    public static 
-    WebApplicationBuilder AddConfiguredSerilog(
-        this WebApplicationBuilder builder)
+    public static WebApplicationBuilder AddConfiguredSerilog(this WebApplicationBuilder builder)
     {
         builder.Logging.ClearProviders();
 
@@ -21,8 +19,7 @@ public static class ServiceExtensions
         return builder;
     }
 
-    public static 
-    IServiceCollection AddSwagger(this IServiceCollection services)
+    public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -30,8 +27,7 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static 
-    IServiceCollection AddConfiguredCors(this IServiceCollection services)
+    public static IServiceCollection AddConfiguredCors(this IServiceCollection services)
     {
         services.AddCors(o => o
             .AddDefaultPolicy(p => p
@@ -42,9 +38,7 @@ public static class ServiceExtensions
         return services;
     }
 
-    public static 
-    IServiceCollection AddConfiguredAuthentication(
-        this IServiceCollection services)
+    public static IServiceCollection AddConfiguredAuthentication(this IServiceCollection services)
     {
         services
             .AddAuthentication("BasicAuthentication")

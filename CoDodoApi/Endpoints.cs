@@ -6,11 +6,11 @@ namespace CoDodoApi;
 
 static class Endpoints
 {
-    public static async
-    Task<IResult> DeleteProcess([FromBody] DeleteProcessDTO dto,
-                                ProcessInMemoryStore store,
-                                TimeProvider provider,
-                                ILoggerFactory logger)
+    public static async Task<IResult> DeleteProcess(
+        [FromBody] DeleteProcessDTO dto,
+        ProcessInMemoryStore store,
+        TimeProvider provider,
+        ILoggerFactory logger)
     {
         try
         {
@@ -28,11 +28,11 @@ static class Endpoints
         }
     }
 
-    public static async
-    Task<IResult> CreateProcess(CreateProcessDTO dto,
-                                ProcessInMemoryStore store,
-                                TimeProvider provider,
-                                ILoggerFactory logger)
+    public static async Task<IResult> CreateProcess(
+        CreateProcessDTO dto,
+        ProcessInMemoryStore store,
+        TimeProvider provider,
+        ILoggerFactory logger)
     {
         try
         {
@@ -50,10 +50,10 @@ static class Endpoints
         }
     }
 
-    public static async
-    Task AllProcesses(ProcessInMemoryStore store,
-                      ILoggerFactory logger,
-                      HttpContext context)
+    public static async Task GetAllProcesses(
+        ProcessInMemoryStore store,
+        ILoggerFactory logger,
+        HttpContext context)
     {
         try
         {
@@ -66,7 +66,7 @@ static class Endpoints
         catch (Exception ex)
         {
             logger.CreateLogger(nameof(Endpoints))
-                .LogWarning($"Exception in {nameof(AllProcesses)}: {ex.Message}");
+                .LogWarning($"Exception in {nameof(GetAllProcesses)}: {ex.Message}");
 
             context.Response.StatusCode = 500;
         }
@@ -88,8 +88,7 @@ static class Endpoints
         return TypedResults.Ok(dtos);
     }
 
-    public static 
-    IResult ImportExcel(IFormFile file, ExcelImporter importer)
+    public static IResult ImportExcel(IFormFile file, ExcelImporter importer)
     {
         try
         {
