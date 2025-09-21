@@ -1,5 +1,6 @@
 using CoDodoApi;
 using CoDodoApi.BackendServices;
+using CoDodoApi.Converters;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguredSerilog();
@@ -9,6 +10,7 @@ IServiceCollection services = builder.Services;
 services.AddSingleton(TimeProvider.System);
 services.AddSingleton<ProcessInMemoryStore>();
 services.AddScoped<ExcelImporter>();
+services.AddTransient<IProcessConverter, ProcessConverter>();
 
 services.AddConfiguredAuthentication();
 services.AddAuthorization();

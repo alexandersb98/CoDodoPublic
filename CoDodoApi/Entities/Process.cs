@@ -1,8 +1,8 @@
-﻿using CoDodoApi.Services.DTOs;
-using System.Text;
+﻿using System.Text;
 
 namespace CoDodoApi.Entities;
 
+// todo: consider refactor to record /ASB
 public sealed class Process
 {
     public string Name { get; set; } = "";
@@ -10,36 +10,19 @@ public sealed class Process
     public string Status { get; set; } = "";
     public DateTimeOffset CreatedDate { get; set; }
     public DateTimeOffset UpdatedDate { get; set; }
-    public TimeProvider TimeProvider { get; set; }
 
     public Process(
         string name,
         Opportunity opportunity,
         string status,
         DateTimeOffset createdDate,
-        DateTimeOffset updatedDate,
-        TimeProvider provider)
+        DateTimeOffset updatedDate)
     {
         Name = name;
         Opportunity = opportunity;
         Status = status;
         CreatedDate = createdDate;
         UpdatedDate = updatedDate;
-        TimeProvider = provider;
-    }
-
-    public int DaysSinceUpdate()
-    {
-        TimeSpan diff = TimeProvider.GetUtcNow() - UpdatedDate;
-
-        return NumberOfWholeDays(diff);
-    }
-
-    public int DaysSinceCreation()
-    {
-        TimeSpan diff = TimeProvider.GetUtcNow() - CreatedDate;
-
-        return NumberOfWholeDays(diff);
     }
 
     internal string Key()
@@ -51,38 +34,10 @@ public sealed class Process
         return Convert.ToBase64String(b);
     }
 
-    static int NumberOfWholeDays(TimeSpan diff)
-    {
-        double numberOfDays = diff.TotalDays;
-
-        return (int)numberOfDays;
-    }
-
     // todo: determine why not used /ASB
+    // todo: consider using enum instead of string /ASB
     internal bool IsWon()
     {
         return Status == "WON";
-    }
-}
-
-internal static class ProcessExtensions
-{
-    public static ProcessDTO ToDto(this Process process)
-    {
-        Process p = process;
-        Opportunity d = p.Opportunity;
-
-        return new ProcessDTO(
-            name: p.Name,
-            uriForAssignment: d.UriForAssignment,
-            company: d.Company,
-            capability: d.Capability,
-            status: p.Status,
-            nameOfSalesLead: d.NameOfSalesLead,
-            hourlyRateInSEK: d.HourlyRateInSEK,
-            updatedDate: p.UpdatedDate,
-            createdDate: p.CreatedDate,
-            daysSinceUpdate: p.DaysSinceUpdate(),
-            daysSinceCreation: p.DaysSinceCreation());
     }
 }

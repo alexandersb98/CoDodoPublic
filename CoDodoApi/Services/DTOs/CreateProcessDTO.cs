@@ -12,7 +12,7 @@ public sealed class CreateProcessDTO
     public string Status {get; set;} = "";
     public string NameOfSalesLead {get; set;} = "";
     public int HourlyRateInSEK {get; set;}
-    public string Notes { get; set; } = "";
+    public string Notes { get; set; } = ""; // todo: determine if needed /ASB
 }
 
 public static class CreateProcessDtoExtensions
@@ -28,10 +28,9 @@ public static class CreateProcessDtoExtensions
 
         return new Process(
             name: dto.Name,
-            opportunity: o,
+            opportunity: o, // todo: consider using dto.Opportunity /ASB
             status: dto.Status,
             createdDate: provider.GetUtcNow(),
-            updatedDate: provider.GetUtcNow(),
-            provider: provider);
+            updatedDate: provider.GetUtcNow());
     }
 }

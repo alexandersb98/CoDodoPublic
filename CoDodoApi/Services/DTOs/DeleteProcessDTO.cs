@@ -8,6 +8,8 @@ public sealed class DeleteProcessDTO
     public string UriForAssignment { get; set; } = ""; // todo: determine if/how to use /ASB
 }
 
+// todo: why does this exist? we only need to identify the process, not create it, in a delete operation /ASB
+// todo: consider removing /ASB
 public static class DeleteProcessDtoExtensions
 {
     public static Process ToProcess(this DeleteProcessDTO dto, TimeProvider provider)
@@ -24,7 +26,6 @@ public static class DeleteProcessDtoExtensions
             opportunity: details,
             status: "",
             createdDate: provider.GetUtcNow(),
-            updatedDate: provider.GetUtcNow(), 
-            provider: provider);
+            updatedDate: provider.GetUtcNow());
     }
 }

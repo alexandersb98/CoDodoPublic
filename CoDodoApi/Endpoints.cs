@@ -1,16 +1,20 @@
 ﻿using CoDodoApi.BackendServices;
-﻿using CoDodoApi.Entities;
-using CoDodoApi.Services;
+using CoDodoApi.Converters;
+using CoDodoApi.Entities;
+using CoDodoApi.Services.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoDodoApi;
 
-static class Endpoints
+// todo: move to Services /ASB
+// todo: refactor to use minimal API or controllers /ASB
+public static class Endpoints
 {
     public static async Task<IResult> DeleteProcess(
         [FromBody] DeleteProcessDTO dto,
         ProcessInMemoryStore store,
         TimeProvider provider,
+        IProcessConverter processConverter,
         ILoggerFactory logger)
     {
         try
@@ -19,7 +23,7 @@ static class Endpoints
 
             Process r = await store.Delete(process).ConfigureAwait(false);
 
-            return OkProcessDto(r);
+            return OkProcessDto(r, processConverter);
         }
         catch (Exception ex)
         {
@@ -33,6 +37,7 @@ static class Endpoints
         CreateProcessDTO dto,
         ProcessInMemoryStore store,
         TimeProvider provider,
+        IProcessConverter processConverter,
         ILoggerFactory logger)
     {
         try
@@ -41,7 +46,7 @@ static class Endpoints
 
             Process r = await store.Add(process);
 
-            return OkProcessDto(r);
+            return OkProcessDto(r, processConverter);
         }
         catch (Exception ex)
         {
@@ -73,17 +78,17 @@ static class Endpoints
         }
     }
 
-    static IResult OkProcessDto(Process process)
+    static IResult OkProcessDto(Process process, IProcessConverter processConverter)
     {
-        ProcessDTO dto = process.ToDto();
+        ProcessDTO dto = processConverter.ConvertToDto(process);
 
         return TypedResults.Ok(dto);
     }
 
-    static IResult OkProcessesDto(Process[] processes)
+    static IResult OkProcessesDto(Process[] processes, IProcessConverter processConverter)
     {
         ProcessDTO[] dtos = processes
-            .Select(p => p.ToDto())
+            .Select(processConverter.ConvertToDto)
             .ToArray();
 
         return TypedResults.Ok(dtos);

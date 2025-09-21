@@ -5,7 +5,6 @@ namespace CoDodoApi.BackendServices;
 
 public sealed class ExcelImporter(
     ProcessInMemoryStore processStore,
-    TimeProvider timeProvider,
     ILogger<ExcelImporter> logger)
 {
 
@@ -72,7 +71,6 @@ public sealed class ExcelImporter(
             opportunity: opportunity,
             status: status,
             createdDate: generationDate,
-            updatedDate: lastUpdate,
-            provider: timeProvider);
+            updatedDate: lastUpdate);
     }
 }

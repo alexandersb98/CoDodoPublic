@@ -29,15 +29,18 @@ public sealed class ProcessDTO
         DaysSinceUpdate = daysSinceUpdate;
         DaysSinceCreation = daysSinceCreation;
     }
+
     public string Name { get; set; } = "";
     public string UriForAssignment { get; set; } = "";
     public string Company { get; set; } = "";
     public string Capability { get; set; } = "";
     public string Status { get; set; } = "";
-    public string NameOfSalesLead { get; set; } = ""; // Sales Lead
-    public int HourlyRateInSEK { get; set; } // Hourly Rate
-    public DateTimeOffset UpdatedDate { get; set; }  // Last Update
-    public DateTimeOffset CreatedDate { get; set; } // Generation Date
+    public string NameOfSalesLead { get; set; } = "";
+    public int HourlyRateInSEK { get; set; }
+    public DateTimeOffset UpdatedDate { get; set; }
+    public DateTimeOffset CreatedDate { get; set; }
+    
+    // todo: determine why these are required, they seem redundant because they can be computed using other properties of this DTO /ASB
     public int DaysSinceUpdate { get; set; }// Freshness
     public int DaysSinceCreation { get; set; } // Age
 }
@@ -58,7 +61,6 @@ public static class ProcessDtoExtensions
             opportunity: o,
             status: dto.Status,
             createdDate: dto.CreatedDate,
-            updatedDate: dto.UpdatedDate,
-            provider: provider);
+            updatedDate: dto.UpdatedDate);
     }
 }
