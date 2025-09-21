@@ -15,7 +15,7 @@ public static class DeleteProcessDtoExtensions
     public static Process ToProcess(this DeleteProcessDTO dto, TimeProvider provider)
     {
         Opportunity details = new(
-            uriForAssignment: "", 
+            uriForAssignment: dto.UriForAssignment, 
             company: "", 
             capability: "", 
             nameOfSalesLead: "", 
