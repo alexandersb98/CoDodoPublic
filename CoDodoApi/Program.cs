@@ -5,14 +5,18 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguredSerilog();
 
 IServiceCollection services = builder.Services;
-services.AddSwagger();
+
 services.AddSingleton(TimeProvider.System);
 services.AddSingleton<ProcessInMemoryStore>();
 services.AddScoped<ExcelImporter>();
+
 services.AddConfiguredAuthentication();
 services.AddAuthorization();
 
+services.AddSwagger();
+
 WebApplication app = builder.Build();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseRouting();
