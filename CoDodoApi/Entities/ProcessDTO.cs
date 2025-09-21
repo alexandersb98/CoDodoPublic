@@ -1,19 +1,19 @@
 ﻿namespace CoDodoApi.Entities;
 
-public sealed
-class ProcessDTO
+public sealed class ProcessDTO
 {
-    public ProcessDTO(string name,
-                      string uriForAssignment,
-                      string company,
-                      string capability,
-                      string status,
-                      string nameOfSalesLead,
-                      int hourlyRateInSEK,
-                      DateTimeOffset updatedDate,
-                      DateTimeOffset createdDate,
-                      int daysSinceUpdate,
-                      int daysSinceCreation)
+    public ProcessDTO(
+        string name,
+        string uriForAssignment,
+        string company,
+        string capability,
+        string status,
+        string nameOfSalesLead,
+        int hourlyRateInSEK,
+        DateTimeOffset updatedDate,
+        DateTimeOffset createdDate,
+        int daysSinceUpdate,
+        int daysSinceCreation)
     {
         Name = name;
         UriForAssignment = uriForAssignment;
@@ -44,18 +44,19 @@ public static class ProcessDtoExtensions
 {
     public static Process ToProcess(this ProcessDTO dto, TimeProvider provider)
     {
-        Opportunity o =
-            new(dto.UriForAssignment,
-                dto.Company,
-                dto.Capability,
-                dto.NameOfSalesLead,
-                dto.HourlyRateInSEK);
+        Opportunity o = new(
+            uriForAssignment: dto.UriForAssignment,
+            company: dto.Company,
+            capability: dto.Capability,
+            nameOfSalesLead: dto.NameOfSalesLead,
+            hourlyRateInSEK: dto.HourlyRateInSEK);
 
-        return new Process(dto.Name,
-                           o,
-                           dto.Status,
-                           dto.CreatedDate,
-                           dto.UpdatedDate,
-                           provider);
+        return new Process(
+            name: dto.Name,
+            opportunity: o,
+            status: dto.Status,
+            createdDate: dto.CreatedDate,
+            updatedDate: dto.UpdatedDate,
+            provider: provider);
     }
 }

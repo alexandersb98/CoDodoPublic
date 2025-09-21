@@ -1,7 +1,6 @@
 ﻿namespace CoDodoApi.Entities;
 
-public sealed
-class Opportunity
+public sealed class Opportunity
 {
     public string UriForAssignment { get; set; } = "";
     public string Company { get; set; } = "";
@@ -9,11 +8,12 @@ class Opportunity
     public string NameOfSalesLead { get; set; } = "";
     public int HourlyRateInSEK { get; set; }
 
-    public Opportunity(string uriForAssignment,
-                       string company,
-                       string capability,
-                       string nameOfSalesLead,
-                       int hourlyRateInSEK)
+    public Opportunity(
+        string uriForAssignment,
+        string company,
+        string capability,
+        string nameOfSalesLead,
+        int hourlyRateInSEK)
     {
         UriForAssignment = uriForAssignment;
         Company = company;
