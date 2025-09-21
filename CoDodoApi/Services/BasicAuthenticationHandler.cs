@@ -42,16 +42,18 @@ public class BasicAuthenticationHandler(
 
     private Task<AuthenticateResult> Success(string[] credentials)
     {
-        Claim name = new ("name", credentials[0]);
-        Claim role = new (ClaimTypes.Role, "Admin");
+        var name = new Claim("name", credentials[0]);
+        var role = new Claim(ClaimTypes.Role, "Admin");
 
-        Claim[] claims = [name, role];
+        var identity = new ClaimsIdentity(
+            claims: [ name, role ], 
+            authenticationType: "Basic");
+        var claimsPrincipal = new ClaimsPrincipal(identity);
 
-        ClaimsIdentity identity = new(claims, "Basic");
-        ClaimsPrincipal claimsPrincipal = new(identity);
-
-        AuthenticationTicket ticket = new(claimsPrincipal, Scheme.Name);
-        AuthenticateResult success = AuthenticateResult.Success(ticket);
+        var ticket = new AuthenticationTicket(
+            principal: claimsPrincipal, 
+            authenticationScheme: Scheme.Name);
+        var success = AuthenticateResult.Success(ticket);
 
         return Task.FromResult(success);
     }
