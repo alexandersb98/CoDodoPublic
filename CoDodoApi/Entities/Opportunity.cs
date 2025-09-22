@@ -1,8 +1,11 @@
-﻿namespace CoDodoApi.Entities;
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace CoDodoApi.Entities;
+
+// todo: consider using record here /ASB
 public sealed class Opportunity
 {
-    public string UriForAssignment { get; set; } = "";
+    [Key] public string UriForAssignment { get; set; } = "";
     public string Company { get; set; } = "";
     public string Capability { get; set; } = "";
     public string NameOfSalesLead { get; set; } = "";

@@ -1,6 +1,7 @@
 using CoDodoApi;
 using CoDodoApi.BackendServices;
 using CoDodoApi.Converters;
+using CoDodoApi.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguredSerilog();
@@ -16,6 +17,8 @@ services.AddConfiguredAuthentication();
 services.AddAuthorization();
 
 services.AddSwagger();
+
+services.AddConfiguredDatabase(builder.Configuration);
 
 WebApplication app = builder.Build();
 
