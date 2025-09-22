@@ -78,9 +78,11 @@ public static class Endpoints
         }
     }
 
-    static IResult OkProcessDto(Process process, IProcessConverter processConverter)
+    static IResult OkProcessDto(Process? process, IProcessConverter processConverter)
     {
-        ProcessDTO dto = processConverter.ConvertToDto(process);
+        if (process is null) return TypedResults.NoContent();
+
+        var dto = processConverter.ConvertToDto(process);
 
         return TypedResults.Ok(dto);
     }
