@@ -1,10 +1,11 @@
 ﻿using ClosedXML.Excel;
+using CoDodoApi.Data.Repositories;
 using CoDodoApi.Entities;
 
 namespace CoDodoApi.BackendServices;
 
 public sealed class ExcelImporter(
-    ProcessInMemoryStore processStore,
+    IProcessRepository processRepository,
     ILogger<ExcelImporter> logger)
 {
 
@@ -25,7 +26,7 @@ public sealed class ExcelImporter(
                 .TakeWhile(x => !x.Cell(1).IsEmpty())
                 .Select(RowToProcess);
 
-            _ = processes.Select(processStore.Add).ToArray();
+            _ = processes.Select(processRepository.CreateProcess).ToArray();
         }
         catch (Exception ex)
         {

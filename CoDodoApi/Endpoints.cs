@@ -1,5 +1,6 @@
 ﻿using CoDodoApi.BackendServices;
 using CoDodoApi.Converters;
+using CoDodoApi.Data.Repositories;
 using CoDodoApi.Entities;
 using CoDodoApi.Services.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +13,16 @@ public static class Endpoints
 {
     public static async Task<IResult> DeleteProcess(
         [FromBody] DeleteProcessDTO dto,
-        ProcessInMemoryStore store,
+        IProcessRepository processRepository,
         TimeProvider provider,
         IProcessConverter processConverter,
         ILoggerFactory logger)
     {
         try
         {
-            Process process = dto.ToProcess(provider);
+            var process = dto.ToProcess(provider);
 
-            Process r = await store.Delete(process).ConfigureAwait(false);
+            var r = await processRepository.DeleteProcessByKey(process.Key()).ConfigureAwait(false);
 
             return OkProcessDto(r, processConverter);
         }
@@ -35,15 +36,15 @@ public static class Endpoints
 
     public static async Task<IResult> CreateProcess(
         CreateProcessDTO dto,
-        ProcessInMemoryStore store,
+        IProcessRepository processRepository,
         IProcessConverter processConverter,
         ILoggerFactory logger)
     {
         try
         {
-            Process process = processConverter.ConvertToEntity(dto);
+            var process = processConverter.ConvertToEntity(dto);
 
-            Process r = await store.Add(process);
+            var r = await processRepository.CreateProcess(process);
 
             return OkProcessDto(r, processConverter);
         }
@@ -56,13 +57,13 @@ public static class Endpoints
     }
 
     public static async Task GetAllProcesses(
-        ProcessInMemoryStore store,
+        IProcessRepository processRepository,
         ILoggerFactory logger,
         HttpContext context)
     {
         try
         {
-            Process[] r = await store.GetAll().ConfigureAwait(false);
+            var r = await processRepository.GetProcesses().ConfigureAwait(false);
 
             context.Response.StatusCode = 200;
 

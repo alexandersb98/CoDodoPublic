@@ -2,6 +2,8 @@ using CoDodoApi;
 using CoDodoApi.BackendServices;
 using CoDodoApi.Converters;
 using CoDodoApi.Data;
+using CoDodoApi.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.AddConfiguredSerilog();
@@ -9,8 +11,22 @@ builder.AddConfiguredSerilog();
 IServiceCollection services = builder.Services;
 
 services.AddSingleton(TimeProvider.System);
-services.AddSingleton<ProcessInMemoryStore>();
 services.AddScoped<ExcelImporter>();
+
+var dataStorage = builder.Configuration.GetSection("DataStorage").Value?.ToUpper();
+switch (dataStorage)
+{
+    case "INMEMORY":
+        services.AddSingleton<IProcessRepository, InMemoryProcessRepository>();
+        break;
+    case "DATABASE":
+        services.AddScoped<IProcessRepository, ProcessRepository>();
+        break;
+    default:
+        throw new ArgumentException($"'{dataStorage}' is not a valid value for DataStorage");
+}
+
+services.AddScoped<IProcessRepository, ProcessRepository>();
 services.AddTransient<IProcessConverter, ProcessConverter>();
 
 services.AddConfiguredAuthentication();
@@ -21,6 +37,16 @@ services.AddSwagger();
 services.AddConfiguredDatabase(builder.Configuration);
 
 WebApplication app = builder.Build();
+
+if (dataStorage == "DATABASE")
+{
+    // Run the migrations on the database
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.Migrate();
+    }
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

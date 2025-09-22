@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace CoDodoApi.Entities;
+﻿namespace CoDodoApi.Entities;
 
 // todo: consider refactor to record /ASB
 public sealed class Process
@@ -31,14 +29,9 @@ public sealed class Process
         UpdatedDate = updatedDate;
     }
 
-    // todo: implement a better way of identifying a process /ASB
-    internal string Key()
+    internal (string, string) Key()
     {
-        string t = Name + Opportunity.UriForAssignment;
-
-        byte[] b = Encoding.UTF8.GetBytes(t);
-
-        return Convert.ToBase64String(b);
+        return (Name, Opportunity.UriForAssignment);
     }
 
     // todo: determine why not used /ASB
