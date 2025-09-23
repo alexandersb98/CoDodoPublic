@@ -12,8 +12,8 @@ public static class MiddlewareExtensions
 
         RouteGroupBuilder processes = api.MapGroup("/processes");
 
-        processes.MapGet("", Endpoints.GetAllProcesses)
-            .RequireAuthorization();
+        processes.MapGet("", Endpoints.GetAllProcesses);
+            //.RequireAuthorization(); // this is turned off for now to allow MCP to call it without auth
 
         processes.MapPost("", Endpoints.CreateProcess)
             .RequireAuthorization();
